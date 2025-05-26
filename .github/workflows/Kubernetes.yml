@@ -8,18 +8,32 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted  # 🟢 Runs on your local machine
+    runs-on: self-hosted
 
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    env:
+      KUBECONFIG: ${{ runner.workspace }}/.kube/config  # Update path if needed
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set kube context to Minikube
+      - name: Ensure Minikube is running
         run: |
-          kubectl config use-context minikube
+          minikube status || minikube start
+
+      - name: Show kubeconfig location
+        run: echo "KUBECONFIG=$KUBECONFIG"
+
+      - name: List kubectl contexts
+        run: kubectl config get-contexts
+
+      - name: Set kube context to Minikube
+        run: kubectl config use-context minikube
 
       - name: Deploy to Minikube
-        run: |
-          kubectl apply -f minifest.yml
+        run: kubectl apply -f minifest.yml
+
+      - name: Verify pods
+        run: kubectl get pods -o wide
