@@ -1,10 +1,8 @@
 name: Deploy to Minikube
 
 on:
-  workflow_run:
-    workflows: ["Build and Publish Docker Image"]
-    types:
-      - completed
+ push:
+  - main
 
 jobs:
   deploy:
