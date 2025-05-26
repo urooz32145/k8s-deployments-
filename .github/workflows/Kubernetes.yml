@@ -1,8 +1,8 @@
 name: Deploy to Minikube
 
 on:
- push:
-  - main
+  push:
+    branches: [ main ]
 
 jobs:
   deploy:
