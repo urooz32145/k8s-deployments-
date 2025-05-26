@@ -13,7 +13,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     env:
-      KUBECONFIG: ${{ runner.workspace }}/.kube/config  # Update path if needed
+      KUBECONFIG: /home/urooj/.minikube/config/config.json   # Update path if needed
 
     steps:
       - name: Checkout repo
